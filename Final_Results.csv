@@ -1,0 +1,19 @@
+Metric,Manual Mode,Auto Mode
+Percentage time in hyperglycemia (day),23.887540453074433,21.038679808841096
+Percentage time in hyperglycemia critical (day),6.536542610571738,3.983721624850656
+Percentage time in range (day),63.72370550161809,64.46759259259257
+Percentage time in range secondary (day),50.273058252427155,50.406959378733546
+Percentage time in hypoglycemia level 1 (day),3.8700107874865166,4.241338112305854
+Percentage time in hypoglycemia level 2 (day),1.0113268608414239,1.3851553166069297
+Percentage time in hyperglycemia (daytime),21.443500539374327,17.98835125448029
+Percentage time in hyperglycemia critical (daytime),6.030879180151026,3.6028972520908
+Percentage time in range (daytime),43.86124595469256,44.73566308243727
+Percentage time in range secondary (daytime),32.868122977346275,33.68055555555556
+Percentage time in hypoglycemia level 1 (daytime),3.239617044228694,3.625298685782556
+Percentage time in hypoglycemia level 2 (daytime),0.933791801510248,1.1798088410991636
+Percentage time in hyperglycemia (overnight),2.444039913700108,3.0503285543608123
+Percentage time in hyperglycemia critical (overnight),0.505663430420712,0.3808243727598566
+Percentage time in range (overnight),19.86245954692557,19.73192951015532
+Percentage time in range secondary (overnight),17.404935275080902,16.726403823178014
+Percentage time in hypoglycemia level 1 (overnight),0.6303937432578208,0.6160394265232976
+Percentage time in hypoglycemia level 2 (overnight),0.07753505933117583,0.20534647550776583
