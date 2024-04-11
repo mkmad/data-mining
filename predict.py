@@ -5,7 +5,16 @@ from scipy.fft import fft
 import scipy.stats
 from scipy.signal import find_peaks
 
+# Function to extract features from the data matrix
 def extract_features(data_matrix):
+    """Extracts features from the data matrix.
+
+    Args:
+        data_matrix (pandas.DataFrame): The data matrix.
+
+    Returns:
+        pandas.DataFrame: A DataFrame containing the extracted features.
+    """
     # Convert data_matrix to DataFrame if it's a numpy array
     if isinstance(data_matrix, np.ndarray):
         data_matrix = pd.DataFrame(data_matrix)
@@ -66,12 +75,17 @@ def extract_features(data_matrix):
 
     return pd.DataFrame(features_list, columns=[f'feature_{i+1}' for i in range(24)])
 
+# Main function orchestrating the prediction process
 def main():
+    """Orchestrates the process of loading the trained model, scaler, and sampler, extracting features from the test data, making predictions, and saving the results."""
     # Load the trained model, scaler, and sampler from pickle
     with open('model_scaler_sampler.pkl', 'rb') as f:
         model, scaler, sampler = pickle.load(f)
 
+    # Load the test data
     test_data = pd.read_csv('test.csv', header=None)  # Assuming test.csv is correctly formatted as N x 24 matrix
+
+    # Extract features from the test data
     test_features = extract_features(test_data)
 
     # Scaling and sampling test data features
@@ -81,7 +95,7 @@ def main():
     # Make predictions
     predictions = model.predict(test_features_resampled)
 
-    # Save results
+    # Save the predictions to a CSV file
     pd.DataFrame(predictions).to_csv('Result.csv', index=False, header=False)
 
 if __name__ == "__main__":

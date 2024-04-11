@@ -22,12 +22,30 @@ import pickle
 
 # Function to read the CSV files
 def read_csv_files(insulin_file, cgm_file):
+    """Reads the insulin and CGM data from CSV files.
+
+    Args:
+        insulin_file (str): Path to the insulin data CSV file.
+        cgm_file (str): Path to the CGM data CSV file.
+
+    Returns:
+        tuple: A tuple containing the insulin data and CGM data as Pandas DataFrames.
+    """
     insulin_data = pd.read_csv(insulin_file, parse_dates=['Date'], usecols=['Date', 'BWZ Carb Input (grams)'])
     cgm_data = pd.read_csv(cgm_file, parse_dates=['Date'], usecols=['Date', 'Sensor Glucose (mg/dL)'])
     return insulin_data, cgm_data
 
 # Function to extract meal data
 def extract_meal_data(insulin_data, cgm_data):
+    """Extracts meal data from the insulin and CGM data.
+
+    Args:
+        insulin_data (pandas.DataFrame): The insulin data.
+        cgm_data (pandas.DataFrame): The CGM data.
+
+    Returns:
+        pandas.DataFrame: A DataFrame containing the meal data.
+    """
     meal_data_matrix = []
     insulin_sorted = insulin_data.dropna(subset=['BWZ Carb Input (grams)'])
     insulin_sorted = insulin_sorted[insulin_data['BWZ Carb Input (grams)'] > 0]
@@ -63,6 +81,15 @@ def extract_meal_data(insulin_data, cgm_data):
 
 # Function to extract no meal data
 def extract_no_meal_data(insulin_data, cgm_data):
+    """Extracts no meal data from the insulin and CGM data.
+
+    Args:
+        insulin_data (pandas.DataFrame): The insulin data.
+        cgm_data (pandas.DataFrame): The CGM data.
+
+    Returns:
+        pandas.DataFrame: A DataFrame containing the no meal data.
+    """
     no_meal_data_matrix = []
     insulin_sorted = insulin_data.sort_values('Date')
     
@@ -96,6 +123,14 @@ def extract_no_meal_data(insulin_data, cgm_data):
     return pd.DataFrame(no_meal_data_matrix)
 
 def extract_features(data_matrix):
+    """Extracts features from the data matrix.
+
+    Args:
+        data_matrix (pandas.DataFrame): The data matrix.
+
+    Returns:
+        pandas.DataFrame: A DataFrame containing the extracted features.
+    """
     # Convert data_matrix to DataFrame if it's a numpy array
     if isinstance(data_matrix, np.ndarray):
         data_matrix = pd.DataFrame(data_matrix)
@@ -158,6 +193,17 @@ def extract_features(data_matrix):
 
 
 def train_model(features, meal_features_count, no_meal_features_count, n_splits=5):
+    """Trains a machine learning model to classify meal and no meal data.
+
+    Args:
+        features (pandas.DataFrame): The features to train the model on.
+        meal_features_count (int): The number of meal features.
+        no_meal_features_count (int): The number of no meal features.
+        n_splits (int, optional): The number of cross-validation splits. Defaults to 5.
+
+    Returns:
+        tuple: A tuple containing the trained model, scaler, and sampler.
+    """
     X = features
     y = [1] * meal_features_count + [0] * no_meal_features_count
 
@@ -199,6 +245,15 @@ def train_model(features, meal_features_count, no_meal_features_count, n_splits=
 
 # Function to retrieve the trained model
 def consolidate_features(insulin_file='InsulinData.csv', cgm_file='CGMData.csv'):
+    """Consolidates the features from the insulin and CGM data.
+
+    Args:
+        insulin_file (str, optional): The path to the insulin data CSV file. Defaults to 'InsulinData.csv'.
+        cgm_file (str, optional): The path to the CGM data CSV file. Defaults to 'CGMData.csv'.
+
+    Returns:
+        tuple: A tuple containing the consolidated features, the number of meal features, and the number of no meal features.
+    """
     insulin_data, cgm_data = read_csv_files(insulin_file, cgm_file)
     meal_data_matrix = extract_meal_data(insulin_data, cgm_data)
     no_meal_data_matrix = extract_no_meal_data(insulin_data, cgm_data)
@@ -211,10 +266,19 @@ def consolidate_features(insulin_file='InsulinData.csv', cgm_file='CGMData.csv')
 
 # Fill NaN values with the column mean or median before training
 def fill_na(data):
+    """Fills NaN values in the data with the column mean or median.
+
+    Args:
+        data (pandas.DataFrame): The data to fill NaN values in.
+
+    Returns:
+        pandas.DataFrame: The data with NaN values filled.
+    """
     return data.fillna(data.mean())
 
 # Main function orchestrating the process
 def main():
+    """Orchestrates the process of training the model and saving the results."""
     patient1_insulin_file = 'InsulinData.csv'
     patient1_cgm_file = 'CGMData.csv'
 
