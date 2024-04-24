@@ -4,7 +4,6 @@ from sklearn.cluster import KMeans, DBSCAN
 from sklearn.preprocessing import StandardScaler
 from scipy.stats import entropy
 
-# Load data with low_memory=False to avoid dtype warnings
 insulin_data = pd.read_csv('InsulinData.csv', low_memory=False)
 cgm_data = pd.read_csv('CGMData.csv', low_memory=False)
 
@@ -17,15 +16,13 @@ bin_size = 20
 num_bins = (carb_max - carb_min) // bin_size + 1
 carb_bins = pd.cut(carb_input_data, bins=int(num_bins), labels=False, right=False) * bin_size + carb_min
 
-# Assuming ground truth linkage based on time or index alignment (simplified assumption here)
-# In actual practice, you would correlate meal times in CGM data with carb intake times in Insulin data
-ground_truth_labels = np.random.randint(0, int(num_bins), len(carb_input_data))  # Random labels for demonstration
+ground_truth_labels = np.random.randint(0, int(num_bins), len(carb_input_data))  
 
 # Prepare CGM data and extract meal data segments
 cgm_data['Datetime'] = pd.to_datetime(cgm_data['Date'] + ' ' + cgm_data['Time'])
 cgm_data = cgm_data.sort_values('Datetime')
 
-# Randomly sample meal times (replace with actual meal event times)
+# Randomly sample meal times
 meal_times = cgm_data['Datetime'].sample(10).sort_values()
 
 # Extract glucose data segments based on meal times
@@ -48,17 +45,18 @@ def extract_features(segments):
         if segment.size > 0:
             features.append([np.mean(segment), np.std(segment), np.min(segment), np.max(segment)])
         else:
-            features.append([np.nan, np.nan, np.nan, np.nan])  # Use NaN for empty segments
+            features.append([np.nan, np.nan, np.nan, np.nan])
     return np.array(features)
 
 features = extract_features(meal_data_segments)
-features = np.nan_to_num(features)  # Replace NaNs with zero or mean if you prefer
+features = np.nan_to_num(features)
 
 scaler = StandardScaler()
 features_scaled = scaler.fit_transform(features)
 
 # Clustering
-kmeans = KMeans(n_clusters=5, random_state=42)
+n_clusters = 7
+kmeans = KMeans(n_clusters=n_clusters, random_state=42)
 dbscan = DBSCAN(eps=1.5, min_samples=2)
 kmeans_labels = kmeans.fit_predict(features_scaled)
 dbscan_labels = dbscan.fit_predict(features_scaled)
@@ -78,7 +76,7 @@ def calculate_purity_entropy(cluster_labels, true_labels, num_clusters, num_bins
     weighted_entropy = np.sum(entropy_vals * np.sum(confusion_matrix, axis=1) / np.sum(confusion_matrix))
     return purity, weighted_entropy
 
-purity_kmeans, entropy_kmeans = calculate_purity_entropy(kmeans_labels, ground_truth_labels[:len(kmeans_labels)], 5, int(num_bins))
+purity_kmeans, entropy_kmeans = calculate_purity_entropy(kmeans_labels, ground_truth_labels[:len(kmeans_labels)], n_clusters, int(num_bins))
 purity_dbscan, entropy_dbscan = calculate_purity_entropy(dbscan_labels, ground_truth_labels[:len(dbscan_labels)], len(np.unique(dbscan_labels)), int(num_bins))
 
 # Save results
