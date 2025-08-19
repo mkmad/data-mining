@@ -4,8 +4,8 @@ from sklearn.cluster import KMeans, DBSCAN
 from sklearn.preprocessing import StandardScaler
 from scipy.stats import entropy
 
-insulin_data = pd.read_csv('InsulinData.csv', low_memory=False)
-cgm_data = pd.read_csv('CGMData.csv', low_memory=False)
+insulin_data = pd.read_csv('../datasets/InsulinData.csv', low_memory=False)
+cgm_data = pd.read_csv('../datasets/CGMData.csv', low_memory=False)
 
 # Extract and bin carbohydrate input
 carb_input_data = insulin_data['BWZ Carb Input (grams)'].dropna().astype(float)

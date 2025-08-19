@@ -244,12 +244,12 @@ def train_model(features, meal_features_count, no_meal_features_count, n_splits=
     return best_model, scaler, sampler
 
 # Function to retrieve the trained model
-def consolidate_features(insulin_file='InsulinData.csv', cgm_file='CGMData.csv'):
+def consolidate_features(insulin_file='../datasets/InsulinData.csv', cgm_file='../datasets/CGMData.csv'):
     """Consolidates the features from the insulin and CGM data.
 
     Args:
-        insulin_file (str, optional): The path to the insulin data CSV file. Defaults to 'InsulinData.csv'.
-        cgm_file (str, optional): The path to the CGM data CSV file. Defaults to 'CGMData.csv'.
+        insulin_file (str, optional): The path to the insulin data CSV file. Defaults to '../datasets/InsulinData.csv'.
+        cgm_file (str, optional): The path to the CGM data CSV file. Defaults to '../datasets/CGMData.csv'.
 
     Returns:
         tuple: A tuple containing the consolidated features, the number of meal features, and the number of no meal features.
@@ -279,11 +279,11 @@ def fill_na(data):
 # Main function orchestrating the process
 def main():
     """Orchestrates the process of training the model and saving the results."""
-    patient1_insulin_file = 'InsulinData.csv'
-    patient1_cgm_file = 'CGMData.csv'
+    patient1_insulin_file = '../datasets/InsulinData.csv'
+    patient1_cgm_file = '../datasets/CGMData.csv'
 
-    patient2_cgm_file = 'CGM_patient2.csv'
-    patient2_insulin_file = 'Insulin_patient2.csv'
+    patient2_cgm_file = '../datasets/CGM_patient2.csv'
+    patient2_insulin_file = '../datasets/Insulin_patient2.csv'
 
     # Train the model and save the results
     patient_1_features, patient_1_num_meal_data, patient_1_num_no_meal_data = consolidate_features(patient1_insulin_file, patient1_cgm_file)
